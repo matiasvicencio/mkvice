@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div>
+        <p>agregar producto</p>
+        <form action="/agregarproducto/" method="post">{% csrf_token %}
+            <div>
+                <label for="nombreproducto">Nombre:</label>
+                <input type="text" id="nombreproducto" name="nombreproducto" required>
+            </div>
+            <div>
+                <label for="descripcionproducto">Descripción:</label>
+                <textarea id="descripcionproducto" name="descripcionproducto"></textarea>
+            </div>
+            <div>
+                <label for="precioproducto">Precio:</label>
+                <input type="number" id="precioproducto" name="precioproducto" required>
+            </div>
+            <div>
+                <label for="fotoproducto">Foto del Producto:</label>
+                <input type="file" id="fotoproducto" name="fotoproducto">
+            </div>
+            <div>
+                <label for="tallaproducto">Talla:</label>
+                <select id="tallaproducto" name="tallaproducto">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+
+
+    <h1>productos</h1>
+    <ul>
+        {% for c in producto %}
+        <li>{{c.nombre}}</li>
+        <li>{{c.descripcion}}</li>
+        <li>{{c.precio}}</li>
+        <li>{{c.foto}}</li>
+        <li>{{c.talla}}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
