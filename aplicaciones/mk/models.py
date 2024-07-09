@@ -26,8 +26,10 @@ class Producto(models.Model):
         ('M', 'M'),
         ('L', 'L'),
         ('XL', 'XL'),
+        ('TU', 'Talla Única'),
     ]
     talla = models.CharField(max_length=2, choices=tallas_choices)
+    cantidad_disponible = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.nombre

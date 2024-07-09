@@ -39,8 +39,26 @@
         </div>
     </div>
 </div>
-    
-    
+
+
+
+<section class="ofert-container">
+    <div class="ofert-1">
+        <div class="ofert-img">
+            <img src="{{ producto_destacado.foto.url }}" alt="{{ producto_destacado.nombre }}">
+        </div>
+        <div class="ofert-txt">
+            <h2>Producto destacado</h2>
+            <h3>{{ producto_destacado.nombre }}</h3>
+            <p>Precio: ${{ producto_destacado.precio }}</p>
+                {% csrf_token %}
+                <button type="submit" class="btn-2">Agregar al Carrito</button>
+            </form>
+        </div>
+    </div>
+</section>
+</section>
+
 
     <main class="products container" id="lista-1">
 
@@ -54,7 +72,7 @@
                     <h3>{{ producto.nombre }}</h3>
                     <p>{{ producto.descripcion }} <br> {{ producto.talla }}</p>
                     <p class="precio">${{ producto.precio }}</p>
-                    <a href="#" class="agregar-carrito btn2" data-id="{{ producto.id }}">Agregar al carrito</a>
+                    <button type="submit" class="btn-2">Agregar al Carrito</button>
                 </div>
             </div>
             {% endfor %}

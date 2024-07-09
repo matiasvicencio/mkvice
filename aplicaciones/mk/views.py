@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from django.shortcuts import get_object_or_404, render, redirect
 
 from aplicaciones.mk.models import Producto
@@ -22,16 +23,18 @@ def agregarproducto(request):
         precio = request.POST['precioproducto']
         foto = request.FILES.get('fotoproducto')
         talla = request.POST['tallaproducto']
+        cantidad = request.POST['cantidadproducto']
 
         nuevo_producto = Producto.objects.create(
             nombre=nombre,
             descripcion=descripcion,
             precio=precio,
             foto=foto,
-            talla=talla
+            talla=talla,
+            cantidad=cantidad
         )
     
-    return redirect('/')
+    return redirect('gestionProductos')
 
 
 def eliminarproducto(request, id_producto):
@@ -41,11 +44,35 @@ def eliminarproducto(request, id_producto):
     
 
 def home(request):
+    producto_destacado = Producto.objects.get(pk=9)
     productos = Producto.objects.all()
-    return render(request, 'home.html', {'productos': productos})
+    return render(request, 'home.html', {
+        'productos': productos,
+        'producto_destacado': producto_destacado,
+    })
 
 def carrito(request):
     return render(request, 'carrito.html')
+
+def agregar_al_carrito(request, producto_id):
+    producto = get_object_or_404(Producto, pk=producto_id)
+
+    # Verificar si hay stock disponible
+    if producto.cantidad_disponible <= 0:
+        messages.error(request, 'Este producto está agotado.')
+        return redirect('home')
+
+    # Agregar producto al carrito
+    # Aquí deberías implementar la lógica para agregar el producto al carrito
+
+    # Reducir la cantidad disponible
+    producto.cantidad_disponible -= 1
+    producto.save()
+
+    # Mensaje de éxito
+    messages.success(request, 'Producto agregado al carrito.')
+
+    return redirect('home')
 
 def about(request):
     return render(request, 'about.html')

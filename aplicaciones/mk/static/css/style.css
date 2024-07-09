@@ -203,12 +203,14 @@ th, td {
 }
 
 .ofert-img {
-    flex-basis: 50px;
+    flex-basis: 150px;
     margin-right: 15px;
 }
 
 .ofert-img img {
-    width: 250px;
+    width: 100%;
+    max-width: 300px; 
+    height: auto; 
 }
 
 .ofert-txt {
