@@ -1,0 +1,46 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>mkvice</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="icon" href="{% static 'images/logofinal.png' %}" type="image/x-icon">
+    </head>
+    <body>
+        <header class="header">
+            <div class="menu container">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">
+                            <img src="{% static 'images/logoblanco.png' %}" alt="Logo" class="logo">
+                        </a>
+                    </li>
+                    <li><a href="{% url 'home' %}">Inicio</a></li>
+                    <li><a href="{% url 'contact' %}">Contacto</a></li>
+                    <li><a href="{% url 'about' %}">Nosotros</a></li>
+                    <li>
+                        <a href="{% url 'carrito' %}">
+                            <img src="{% static 'images/carritofinal.png' %}" alt="Carrito" class="carrito-icono">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        {% block content %}{% endblock %}
+    <main class="contact container">
+        <div class="contact-img">
+            <img src="{% static 'images/about2.jpeg' %}" alt="Contact Image">
+        </div>
+        <div class="contact-form">
+            <h2>Sobre nosotros</h2>
+            <p>Como diseñador y confeccionista de ropa, me dedico a la creación de cada prenda con un enfoque detallado.<br> El proceso de cada prenda comienza con la conceptualización y elaboración de bocetos, donde se plasman las ideas iniciales y se definen los diseños.<br> Una vez que el boceto está listo, selecciono cuidadosamente las telas adecuadas, considerando tanto la calidad como la textura para garantizar el mejor resultado final.<br>
+                Luego, procedo a tomar las medidas precisas necesarias, asegurándome de que cada prenda esté perfectamente adaptada a las especificaciones requeridas.<br> Este paso es crucial para asegurar un ajuste impecable y cómodo.<br>        
+                A continuación, paso a la maquina de coser, donde se empieza a dar forma a la prenda.<br> Durante todo el proceso de confección, presto especial atención a cada detalle, cuidando cada puntada y cada costura.<br> Mi objetivo es que ninguna prenda tenga la más mínima falla.<br>                
+                Este compromiso con la excelencia y el detalle asegura que cada prenda que creo no solo cumple con las expectativas de diseño, sino que también ofrece durabilidad y un acabado profesional.</p>
+        </div>
+    </main>    
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

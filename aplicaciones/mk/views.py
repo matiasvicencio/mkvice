@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from aplicaciones.mk.models import Producto
 
-def home(request):
-    return render(request, 'theme-clean.html')
+
+
+def producto_detalle(request, producto_id):
+    producto = Producto.objects.get(id=producto_id)
+    return render(request, 'home.html', {'producto': producto})
 
 def gestion(request):
     productolist = Producto.objects.all()
@@ -33,8 +36,25 @@ def agregarproducto(request):
 
 def eliminarproducto(request, id_producto):
     producto = Producto.objects.get(id=id_producto)
+    producto.delete()
+    return redirect('gestionProductos')
     
-    if request.method == 'POST':
-        producto.delete()
 
-        return redirect('gestionProductos')
+def home(request):
+    productos = Producto.objects.all()
+    return render(request, 'home.html', {'productos': productos})
+
+def carrito(request):
+    return render(request, 'carrito.html')
+
+def about(request):
+    return render(request, 'about.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+
+def blog(request):
+    return render(request, 'blog.html')
+
+def portfolio(request):
+    return render(request, 'portfolio.html')

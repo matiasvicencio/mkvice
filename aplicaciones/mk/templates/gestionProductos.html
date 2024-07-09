@@ -9,7 +9,7 @@
 
     <div>
         <p>agregar producto</p>
-        <form action="/agregarproducto/" method="post">{% csrf_token %}
+        <form action="/agregarproducto/" method="post" enctype="multipart/form-data">{% csrf_token %}
             <div>
                 <label for="nombreproducto">Nombre:</label>
                 <input type="text" id="nombreproducto" name="nombreproducto" required>
@@ -50,6 +50,9 @@
         <li>{{c.precio}}</li>
         <li>{{c.foto}}</li>
         <li>{{c.talla}}</li>
+        <li>
+            <li><a href="{% url 'eliminarproducto' c.id %}" class="btn2">Eliminar</a></li>
+        </li>
         {% endfor %}
     </ul>
 

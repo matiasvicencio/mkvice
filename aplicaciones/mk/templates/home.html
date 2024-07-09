@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mkvice</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logofinal.png' %}" type="image/x-icon">
+</head>
+<body>
+    
+    <header class="header">
+        <div class="menu container">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/logoblanco.png' %}" alt="Logo" class="logo">
+                    </a>
+                </li>
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'contact' %}">Contacto</a></li>
+                <li><a href="{% url 'about' %}">Nosotros</a></li>
+                <li>
+                    <a href="{% url 'carrito' %}">
+                        <img src="{% static 'images/carritofinal.png' %}" alt="Carrito" class="carrito-icono">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+
+<div class="custom-header">
+    <div class="custom-header-content container">
+        <div class="custom-header-txt">
+            <h1>MK vice</h1>
+            <p>Darkera</p>
+        </div>
+    </div>
+</div>
+    
+    
+
+    <main class="products container" id="lista-1">
+
+        <h2>productos</h2>
+
+        <div class="product-content">
+            {% for producto in productos %}
+            <div class="product">
+                <img src="{{ producto.foto.url }}" alt="{{ producto.nombre }}">
+                <div class="product-txt">
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }} <br> {{ producto.talla }}</p>
+                    <p class="precio">${{ producto.precio }}</p>
+                    <a href="#" class="agregar-carrito btn2" data-id="{{ producto.id }}">Agregar al carrito</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </main>
+
+
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="payment-methods">
+                <h3>Métodos de Pago</h3>
+                <div class="payment-logos">
+                    <img src="{% static 'images/webpay.jpg' %}" alt="webpay">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+
+<script src="scrip.js"></script>
+</body>
+</html>

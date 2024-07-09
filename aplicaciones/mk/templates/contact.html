@@ -1,0 +1,49 @@
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>mkvice</title>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="icon" href="{% static 'images/logofinal.png' %}" type="image/x-icon">
+    </head>
+    <body>
+        <header class="header">
+            <div class="menu container">
+                <ul>
+                    <li>
+                        <a href="{% url 'home' %}">
+                            <img src="{% static 'images/logoblanco.png' %}" alt="Logo" class="logo">
+                        </a>
+                    </li>
+                    <li><a href="{% url 'home' %}">Inicio</a></li>
+                    <li><a href="{% url 'contact' %}">Contacto</a></li>
+                    <li><a href="{% url 'about' %}">Nosotros</a></li>
+                    <li>
+                        <a href="{% url 'carrito' %}">
+                            <img src="{% static 'images/carritofinal.png' %}" alt="Carrito" class="carrito-icono">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        {% block content %}{% endblock %}
+
+    <main class="contact container">
+        <div class="contact-img">
+            <img src="{% static 'images/contact1.jpeg' %}" alt="Contact Image">
+        </div>
+        <div class="contact-form">
+            <h2>Contacto</h2>
+            <p>Si tienes dudas sobre alguno de nuestros productos o deseas trabajar con nosotros, contáctanos</p>
+            <ul>
+                <li>Correo: mkunuwu11@gmail.com</li>
+                <li>Teléfono: +56920217102</li>
+                <li>instagram: oyymkun</li>
+            </ul>
+        </div>
+    </main>    
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
