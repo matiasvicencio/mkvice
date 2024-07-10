@@ -3,14 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from aplicaciones.mk.models import Producto, Cliente, DetalleOrden, Orden
-from transbank.webpay.webpay_plus.transaction import Transaction
-from transbank.common.integration_type import IntegrationType
-from transbank.webpay.webpay_plus.configuration import Configuration 
 
-configuration = Configuration()
-configuration.commerce_code = '597055555532'
-configuration.api_key = 'YourAPIKey'
-configuration.integration_type = IntegrationType.TEST
+
 
 def producto_detalle(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
@@ -102,7 +96,6 @@ def carrito(request):
 
         return redirect('pagina_de_confirmacion')  
 
-
     carrito = request.session.get('carrito', {})
     productos_carrito = []
     total_carrito = 0
@@ -124,6 +117,7 @@ def carrito(request):
         'total_carrito': total_carrito,
     }
     return render(request, 'carrito.html', context)
+
 
 
 def agregar_al_carrito(request):
@@ -151,6 +145,16 @@ def agregar_al_carrito(request):
         return HttpResponse('Producto agregado al carrito.')
     else:
         return HttpResponse('Error: Método no permitido.')
+
+
+def quitar(request, producto_id):
+    carrito = request.session.get('carrito', {})
+
+    if str(producto_id) in carrito:
+        del carrito[str(producto_id)]
+        request.session['carrito'] = carrito
+
+    return redirect('carrito')
 
 def about(request):
     return render(request, 'about.html')

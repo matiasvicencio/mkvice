@@ -9,6 +9,25 @@
         <link rel="icon" href="{% static 'images/logofinal.png' %}" type="image/x-icon">
     </head>
 <body>
+    <header class="header">
+        <div class="menu container">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/logoblanco.png' %}" alt="Logo" class="logo">
+                    </a>
+                </li>
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'contact' %}">Contacto</a></li>
+                <li><a href="{% url 'about' %}">Nosotros</a></li>
+                <li>
+                    <a href="{% url 'carrito' %}">
+                        <img src="{% static 'images/carritofinal.png' %}" alt="Carrito" class="carrito-icono">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
     <main class="carrito-container">
         <section class="carrito-section">
             <h2>Carrito de Compras</h2>
@@ -19,6 +38,10 @@
                     <h3>{{ item.nombre }}</h3>
                     <p>Precio: ${{ item.precio }}</p>
                     <p>Cantidad: {{ item.cantidad }}</p>
+                    <form method="post" action="{% url 'quitar' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Eliminar</button>
+                    </form>
                 </div>
             </div>
             {% endfor %}
@@ -28,7 +51,7 @@
             </div>
 
             <div class="carrito-form-container">
-                <form action="{% url 'carrito_de_compras' %}" method="post" class="carrito-form">
+                <form action="{% url 'carrito' %}" method="post" class="carrito-form">
                     {% csrf_token %}
                     <div>
                         <label for="rut">RUT:</label>
@@ -57,13 +80,12 @@
                     <button type="submit" class="btn-guardar">Guardar Datos</button>
                 </form>
             </div>
+            <form name='rec20108_btn1' method='post' action='https://www.webpay.cl/backpub/external/form-pay'>
+                <input type='hidden' name='idFormulario' value='182231' />
+                <input type='hidden' name='monto' value='{{ total_carrito }}' />
+                <input type='image' title='Imagen' name='button1' src='https://www.webpay.cl/assets/img/boton_webpaycl.svg' value='Boton 1' />
+            </form>
 
-            <div class="pago-section">
-                <form action="{% url 'iniciar_pago' %}" method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="amount" value="{{ total_carrito }}">
-                    <button type="submit">Pagar con Webpay</button>
-                </form>
             </div>
         </section>
     </main>
