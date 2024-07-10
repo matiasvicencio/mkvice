@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mkvice</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logofinal.png' %}" type="image/x-icon">
+</head>
+<header class="header">
+    <div class="menu container">
+        <ul>
+            <li>
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logoblanco.png' %}" alt="Logo" class="logo">
+                </a>
+            </li>
+            <li><a href="{% url 'home' %}">Inicio</a></li>
+            <li><a href="{% url 'contact' %}">Contacto</a></li>
+            <li><a href="{% url 'about' %}">Nosotros</a></li>
+            <li><a href="{% url 'login' %}">Admin</a></li>
+            <li>
+                <a href="{% url 'carrito' %}">
+                    <img src="{% static 'images/carritofinal.png' %}" alt="Carrito" class="carrito-icono">
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+{% block content %}{% endblock %}
+
+<body>
+    <a href="{% url 'home' %}">volver</a>
+    <h1>Admin Dashboard</h1>
+    <ul>
+        <li><a href="{% url 'gestionProductos' %}">Gestionar Productos</a></li>
+        <li><a href="{% url 'vista_clientes' %}">Vista de Clientes</a></li>
+        <li><a href="{% url 'ordenes' %}">Ordenes</a></li>
+    </ul>
+</body>
+</html>

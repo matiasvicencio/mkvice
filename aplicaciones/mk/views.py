@@ -1,9 +1,10 @@
 from pyexpat.errors import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from aplicaciones.mk.models import Producto, Cliente, DetalleOrden, Orden
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 
 def producto_detalle(request, producto_id):
@@ -57,7 +58,6 @@ def home(request):
     })
 
 def carrito(request):
-
     if request.method == 'POST':
         rut = request.POST.get('rut')
         nombre = request.POST.get('nombre')
@@ -66,14 +66,26 @@ def carrito(request):
         telefono = request.POST.get('telefono')
         direccion = request.POST.get('direccion')
 
-        cliente = Cliente.objects.create(
+
+        cliente, created = Cliente.objects.get_or_create(
             rut=rut,
-            nombre=nombre,
-            apellido=apellido,
-            email=correo,
-            telefono=telefono,
-            direccion=direccion
+            defaults={
+                'nombre': nombre,
+                'apellido': apellido,
+                'email': correo,
+                'telefono': telefono,
+                'direccion': direccion,
+            }
         )
+
+
+        if not created:
+            cliente.nombre = nombre
+            cliente.apellido = apellido
+            cliente.email = correo
+            cliente.telefono = telefono
+            cliente.direccion = direccion
+            cliente.save()
 
         orden = Orden(cliente=cliente, total=0)
         orden.save()
@@ -86,7 +98,7 @@ def carrito(request):
             subtotal_producto = producto.precio * item['cantidad']
             total_carrito += subtotal_producto
 
-            detalle = DetalleOrden(orden=orden, producto=producto, cantidad=item['cantidad'], subtotal=subtotal_producto)
+            detalle = DetalleOrden(orden=orden, producto=producto, cantidad=item['cantidad'])
             detalle.save()
 
         orden.total = total_carrito
@@ -94,7 +106,7 @@ def carrito(request):
 
         del request.session['carrito']
 
-        return redirect('pagina_de_confirmacion')  
+        return redirect('confirmacion')
 
     carrito = request.session.get('carrito', {})
     productos_carrito = []
@@ -117,7 +129,6 @@ def carrito(request):
         'total_carrito': total_carrito,
     }
     return render(request, 'carrito.html', context)
-
 
 
 def agregar_al_carrito(request):
@@ -168,4 +179,35 @@ def blog(request):
 def portfolio(request):
     return render(request, 'portfolio.html')
 
+@login_required
+def administracion(request):
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+    return render(request, 'administracion.html')
 
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('administracion')  # Redirigir a la página de administración después de iniciar sesión
+        else:
+            return render(request, 'login.html', {'error': 'Credenciales inválidas'})
+    return render(request, 'login.html')
+
+def confirmacion(request):
+    return render(request, 'confirmacion.html')
+
+from django.shortcuts import render
+from .models import Orden
+
+def ordenes(request):
+
+    ordenes = Orden.objects.select_related('cliente').prefetch_related('detalles__producto').all()
+
+    context = {
+        'ordenes': ordenes
+    }
+    return render(request, 'ordenes.html', context)

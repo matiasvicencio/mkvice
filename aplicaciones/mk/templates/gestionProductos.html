@@ -6,7 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-
+    <a href="{% url 'administracion' %}">volver</a>
     <div>
         <p>agregar producto</p>
         <form action="/agregarproducto/" method="post" enctype="multipart/form-data">{% csrf_token %}

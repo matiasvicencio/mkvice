@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mkvice</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logofinal.png' %}" type="image/x-icon">
+</head>
+<body>
+    
+    <header class="header">
+        <div class="menu container">
+            <ul>
+                <li>
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'images/logoblanco.png' %}" alt="Logo" class="logo">
+                    </a>
+                </li>
+                <li><a href="{% url 'home' %}">Inicio</a></li>
+                <li><a href="{% url 'contact' %}">Contacto</a></li>
+                <li><a href="{% url 'about' %}">Nosotros</a></li>
+                <li><a href="{% url 'login' %}">Admin</a></li>
+                <li>
+                    <a href="{% url 'carrito' %}">
+                        <img src="{% static 'images/carritofinal.png' %}" alt="Carrito" class="carrito-icono">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    {% block content %}{% endblock %}
+    <main class="ordenes-container">
+        <section class="ordenes-section">
+            <h2>Órdenes</h2>
+            {% for orden in ordenes %}
+            <div class="orden">
+                <h3>Orden ID: {{ orden.id }}</h3>
+                <p>Cliente: {{ orden.cliente.nombre }} {{ orden.cliente.apellido }}</p>
+                <p>Fecha: {{ orden.fecha }}</p>
+                <p>Total: ${{ orden.total|floatformat:"-2" }}</p>
+                <h4>Detalles de la Orden:</h4>
+                <ul>
+                    {% for detalle in orden.detalles.all %}
+                    <li>{{ detalle.producto.nombre }} x {{ detalle.cantidad }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

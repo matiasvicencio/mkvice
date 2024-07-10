@@ -715,3 +715,46 @@ th, td {
 .vista-footer .vista-footer-content {
     margin: auto;
 }
+
+
+.ordenes-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ordenes-section {
+    margin-bottom: 20px;
+}
+
+.orden {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.orden h3 {
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.orden p {
+    margin: 5px 0;
+}
+
+.orden h4 {
+    margin-top: 10px;
+}
+
+.orden ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.orden li {
+    margin-bottom: 5px;
+}
