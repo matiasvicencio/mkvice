@@ -10,17 +10,17 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('blog/', views.blog, name='blog'),
     path('portfolio/', views.portfolio, name='portfolio'),
-    path('administracion/', views.administracion, name='administracion'),
+    path('login/administracion/', views.administracion, name='administracion'),
     path('login/', views.login_view, name='login'),
-    path('gestionProductos/', views.gestion, name='gestionProductos'),
+    path('login/administracion/gestionProductos/', views.gestion, name='gestionProductos'),
     path('agregarproducto/', views.agregarproducto, name='agregar_producto'),
     path('producto/<int:producto_id>/', views.producto_detalle, name='producto_detalle'),
     path('eliminarproducto/<int:id_producto>/', views.eliminarproducto, name='eliminarproducto'),
-    path('vistaclientes/', views.vista_clientes, name='vista_clientes'),
+    path('login/administracion/vistaclientes/', views.vista_clientes, name='vista_clientes'),
     path('agregar-al-carrito/', views.agregar_al_carrito, name='agregar_al_carrito'),
     path('quitar/<int:producto_id>/', views.quitar, name='quitar'),
     path('confirmacion/', views.confirmacion, name='confirmacion'),
-    path('ordenes/', views.ordenes, name='ordenes'),
+    path('login/administracion/ordenes/', views.ordenes, name='ordenes'),
 ]
 
 

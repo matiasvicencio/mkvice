@@ -11,12 +11,13 @@ def producto_detalle(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
     return render(request, 'home.html', {'producto': producto})
 
+@login_required
 def gestion(request):
     productolist = Producto.objects.all()
     return render(request, 'gestionProductos.html', {"producto": productolist})
 
-def redirect_to_gestion_productos(request):
-    return redirect('gestionProductos')
+
+
 
 def agregarproducto(request):
     if request.method == 'POST':
@@ -38,7 +39,7 @@ def agregarproducto(request):
     
     return redirect('gestionProductos')
 
-
+@login_required
 def vista_clientes(request):
     clientes = Cliente.objects.all()
     return render(request, 'vistaclientes.html', {'clientes': clientes})
@@ -184,7 +185,7 @@ def administracion(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, 'administracion.html')
-
+@login_required
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -200,9 +201,8 @@ def login_view(request):
 def confirmacion(request):
     return render(request, 'confirmacion.html')
 
-from django.shortcuts import render
-from .models import Orden
 
+@login_required
 def ordenes(request):
 
     ordenes = Orden.objects.select_related('cliente').prefetch_related('detalles__producto').all()
