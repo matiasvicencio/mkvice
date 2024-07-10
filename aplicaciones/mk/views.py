@@ -5,7 +5,7 @@ from django.urls import reverse
 from aplicaciones.mk.models import Producto, Cliente, DetalleOrden, Orden
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-
+from .forms import ProductoForm
 
 def producto_detalle(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
@@ -133,31 +133,34 @@ def carrito(request):
 
 
 def agregar_al_carrito(request):
-    if request.method == 'POST':
-        producto_id = request.POST.get('producto_id')
-        producto = get_object_or_404(Producto, id=producto_id)
-        
-        if 'carrito' not in request.session:
-            request.session['carrito'] = {}
-        
-        carrito = request.session['carrito']
-        
-        if producto_id in carrito:
+    producto_id = request.POST.get('producto_id')
+    producto = get_object_or_404(Producto, id=producto_id)
+
+    if producto.cantidad_disponible <= 0:
+        return HttpResponse('Producto agotado.', status=400)
+
+
+    if 'carrito' not in request.session:
+        request.session['carrito'] = {}
+    
+    carrito = request.session['carrito']
+    
+    if producto_id in carrito:
+        if carrito[producto_id]['cantidad'] < producto.cantidad_disponible:
             carrito[producto_id]['cantidad'] += 1
         else:
-            carrito[producto_id] = {
-                'id': producto.id,
-                'nombre': producto.nombre,
-                'precio': float(producto.precio),
-                'cantidad': 1,
-            }
-        
-        request.session.modified = True
-        
-        return HttpResponse('Producto agregado al carrito.')
+            return HttpResponse('No se puede agregar más de este producto.', status=400)
     else:
-        return HttpResponse('Error: Método no permitido.')
-
+        carrito[producto_id] = {
+            'id': producto.id,
+            'nombre': producto.nombre,
+            'precio': float(producto.precio),
+            'cantidad': 1,
+        }
+    
+    request.session.modified = True
+    
+    return HttpResponse('Producto agregado al carrito.')
 
 def quitar(request, producto_id):
     carrito = request.session.get('carrito', {})
@@ -193,7 +196,7 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('administracion')  # Redirigir a la página de administración después de iniciar sesión
+            return redirect('administracion') 
         else:
             return render(request, 'login.html', {'error': 'Credenciales inválidas'})
     return render(request, 'login.html')
@@ -211,3 +214,17 @@ def ordenes(request):
         'ordenes': ordenes
     }
     return render(request, 'ordenes.html', context)
+
+
+def editarproducto(request, id_producto):
+    producto = get_object_or_404(Producto, id=id_producto)
+
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('gestionProductos') 
+    else:
+        form = ProductoForm(instance=producto)
+
+    return render(request, 'editarproducto.html', {'form': form})

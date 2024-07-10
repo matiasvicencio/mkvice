@@ -56,8 +56,12 @@
         <li>{{c.precio}}</li>
         <li>{{c.foto}}</li>
         <li>{{c.talla}}</li>
+        <li>{{c.cantidad_disponible}}</li>  
         <li>
-            <li><a href="{% url 'eliminarproducto' c.id %}" class="btn2">Eliminar</a></li>
+            <li>
+                <a href="{% url 'editarproducto' c.id %}" class="btn-2">Editar</a>
+                <a href="{% url 'eliminarproducto' c.id %}" class="btn2">Eliminar</a>
+            </li>
         </li>
         {% endfor %}
     </ul>

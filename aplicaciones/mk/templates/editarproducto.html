@@ -1,0 +1,15 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Producto</title>
+</head>
+<body>
+    <a href="{% url 'gestionProductos' %}">volver</a>
+    <h2>Editar Producto</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</body>
+</html>

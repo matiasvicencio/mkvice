@@ -49,3 +49,4 @@ class DetalleOrden(models.Model):
 
     def __str__(self):
         return f"Detalle de la orden {self.orden.id}: {self.producto.nombre} x {self.cantidad}"
+
