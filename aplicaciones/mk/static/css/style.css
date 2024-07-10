@@ -24,8 +24,7 @@ img {
     margin: 0 auto;
 }
 
-.header {
-    background-image: url('static/images/easy.jpg'); /* Reemplaza con la ruta de tu imagen de fondo */
+.header { /* Reemplaza con la ruta de tu imagen de fondo */
     background-size: cover;
     background-position: center;
     color: #ffffff; /* Color del texto */
@@ -35,7 +34,6 @@ img {
 .header-background {
     position: relative;
     height: 100vh;
-    background-image: url('static/images/easy.jpg');
     background-size: cover;
     overflow: hidden;
 }
@@ -638,4 +636,82 @@ th, td {
 
 .custom-header-txt p {
     font-size: 1.5rem; /* Tamaño del texto */
+}
+
+.vista-body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.vista-header {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 0;
+}
+
+.vista-header .vista-menu {
+    display: flex;
+    justify-content: center;
+}
+
+.vista-header .vista-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.vista-header .vista-menu ul li {
+    margin: 0 15px;
+}
+
+.vista-header .vista-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.vista-container {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.vista-clients-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vista-clients-table th,
+.vista-clients-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.vista-clients-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.vista-clients-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.vista-clients-table tr:hover {
+    background-color: #ddd;
+}
+
+.vista-footer {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.vista-footer .vista-footer-content {
+    margin: auto;
 }

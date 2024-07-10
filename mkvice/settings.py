@@ -12,7 +12,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import transbank
+from transbank import Configuration
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+transbank.webpay.configuration.configure_for_testing() 
+Configuration.configure_for_testing()
+Configuration.commerce_code = '597051699448'
+Configuration.api_key = 'tu_api_key'
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

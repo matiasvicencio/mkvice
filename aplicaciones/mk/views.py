@@ -1,9 +1,16 @@
 from pyexpat.errors import messages
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
+from aplicaciones.mk.models import Producto, Cliente, DetalleOrden, Orden
+from transbank.webpay.webpay_plus.transaction import Transaction
+from transbank.common.integration_type import IntegrationType
+from transbank.webpay.webpay_plus.configuration import Configuration 
 
-from aplicaciones.mk.models import Producto
-
-
+configuration = Configuration()
+configuration.commerce_code = '597055555532'
+configuration.api_key = 'YourAPIKey'
+configuration.integration_type = IntegrationType.TEST
 
 def producto_detalle(request, producto_id):
     producto = Producto.objects.get(id=producto_id)
@@ -37,6 +44,10 @@ def agregarproducto(request):
     return redirect('gestionProductos')
 
 
+def vista_clientes(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'vistaclientes.html', {'clientes': clientes})
+
 def eliminarproducto(request, id_producto):
     producto = Producto.objects.get(id=id_producto)
     producto.delete()
@@ -52,27 +63,94 @@ def home(request):
     })
 
 def carrito(request):
-    return render(request, 'carrito.html')
 
-def agregar_al_carrito(request, producto_id):
-    producto = get_object_or_404(Producto, pk=producto_id)
+    if request.method == 'POST':
+        rut = request.POST.get('rut')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        correo = request.POST.get('correo')
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
 
-    # Verificar si hay stock disponible
-    if producto.cantidad_disponible <= 0:
-        messages.error(request, 'Este producto está agotado.')
-        return redirect('home')
+        cliente = Cliente.objects.create(
+            rut=rut,
+            nombre=nombre,
+            apellido=apellido,
+            email=correo,
+            telefono=telefono,
+            direccion=direccion
+        )
 
-    # Agregar producto al carrito
-    # Aquí deberías implementar la lógica para agregar el producto al carrito
+        orden = Orden(cliente=cliente, total=0)
+        orden.save()
 
-    # Reducir la cantidad disponible
-    producto.cantidad_disponible -= 1
-    producto.save()
+        carrito = request.session.get('carrito', {})
+        total_carrito = 0
 
-    # Mensaje de éxito
-    messages.success(request, 'Producto agregado al carrito.')
+        for producto_id, item in carrito.items():
+            producto = get_object_or_404(Producto, id=producto_id)
+            subtotal_producto = producto.precio * item['cantidad']
+            total_carrito += subtotal_producto
 
-    return redirect('home')
+            detalle = DetalleOrden(orden=orden, producto=producto, cantidad=item['cantidad'], subtotal=subtotal_producto)
+            detalle.save()
+
+        orden.total = total_carrito
+        orden.save()
+
+        del request.session['carrito']
+
+        return redirect('pagina_de_confirmacion')  
+
+
+    carrito = request.session.get('carrito', {})
+    productos_carrito = []
+    total_carrito = 0
+
+    for producto_id, item in carrito.items():
+        producto = get_object_or_404(Producto, id=producto_id)
+        subtotal_producto = producto.precio * item['cantidad']
+        total_carrito += subtotal_producto
+        productos_carrito.append({
+            'id': producto.id,
+            'nombre': producto.nombre,
+            'precio': producto.precio,
+            'cantidad': item['cantidad'],
+            'foto_url': producto.foto.url
+        })
+
+    context = {
+        'productos_carrito': productos_carrito,
+        'total_carrito': total_carrito,
+    }
+    return render(request, 'carrito.html', context)
+
+
+def agregar_al_carrito(request):
+    if request.method == 'POST':
+        producto_id = request.POST.get('producto_id')
+        producto = get_object_or_404(Producto, id=producto_id)
+        
+        if 'carrito' not in request.session:
+            request.session['carrito'] = {}
+        
+        carrito = request.session['carrito']
+        
+        if producto_id in carrito:
+            carrito[producto_id]['cantidad'] += 1
+        else:
+            carrito[producto_id] = {
+                'id': producto.id,
+                'nombre': producto.nombre,
+                'precio': float(producto.precio),
+                'cantidad': 1,
+            }
+        
+        request.session.modified = True
+        
+        return HttpResponse('Producto agregado al carrito.')
+    else:
+        return HttpResponse('Error: Método no permitido.')
 
 def about(request):
     return render(request, 'about.html')
@@ -85,3 +163,5 @@ def blog(request):
 
 def portfolio(request):
     return render(request, 'portfolio.html')
+
+
